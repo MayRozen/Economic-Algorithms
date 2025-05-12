@@ -167,7 +167,7 @@ class EnvyGraph:
             path.append(current)
             current = parents[current]
             if current in path:
-                print("Cycle detected in path reconstruction")
+                # print("Cycle detected in path reconstruction")
                 return []
             if current is None:
                 return []
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     # הוספת קודקודים עם ערכי החפצים שלהם
     # נניח שכל קודקוד הוא אדם, והחפץ שלו הוא באותו שם (לדוגמה: A הוא אדם והחפץ שלו הוא A)
     # -------------------- הדוגמה כאן היא הדוגמה מההרצאה --------------------
-    print("Example 1:")
+    print(f"\nExample 1:")
     g.add_node('A', 'A', 50, {'B': 30})
     g.add_node('B', 'B', 40, {'A': 90})
 
@@ -221,3 +221,102 @@ if __name__ == "__main__":
     # מציאת המעגל עם המשקל הממוצע הגבוה ביותר
     cycle, avg_weight = g.find_max_avg_weight_cycle()
     print(f"Cycle found: {cycle}, Avg Weight: {avg_weight}")
+
+# -------------------- דוגמה עם מעגל - 1000 קודקודים, עם משקל 0 --------------------------
+    print(f"\nExample 3: A graph with 1000 vertices, there are weights 0")
+    g = EnvyGraph()
+
+    # הוספת 1000 קודקודים עם ערכי החפצים שלהם
+    for i in range(1, 1001):
+        node_id = f'Node{i}'
+        item_id = node_id
+        own_value = i * 10  # ערך החפץ של הקודקוד
+        values_for_others = {f'Node{j}': j * 5 for j in range(1, 101) if j != i}
+        g.add_node(node_id, item_id, own_value, values_for_others)
+
+    # בניית צלעות הקנאה אוטומטית
+    g.build_envy_edges()
+
+    # הוספת צלעות מקודקוד לעצמו במשקל 0 כדי ליצור מעגלים
+    for i in range(1, 1001):
+        node_id = f'Node{i}'
+        g.add_envy_edge(node_id, node_id, 0)
+
+    # הצגת משקלי הקנאה שחושבו
+    # print("משקלי הקנאה שחושבו:")
+    # for source in g.nodes:
+    #     for target, weight in g.graph[source]:
+    #         print(f"{source} -> {target}: {weight}")
+
+    # מציאת המעגל עם המשקל הממוצע הגבוה ביותר
+    cycle, avg_weight = g.find_max_avg_weight_cycle()
+    print(f"Cycle found: {cycle}, Avg Weight: {avg_weight}")
+
+#-------------------- דוגמה ללא מעגל - 100 קודקודים --------------------------
+    print(f"\nExample 4: A graph with 100 vertices, no cycle exists")
+    g = EnvyGraph()
+
+    # הוספת 100 קודקודים עם ערכי החפצים שלהם
+    for i in range(1, 101):
+        node_id = f'Node{i}'
+        item_id = node_id
+        own_value = i * 10  # ערך החפץ של הקודקוד
+        values_for_others = {f'Node{j}': j * 5 for j in range(1, 101) if j != i}
+        g.add_node(node_id, item_id, own_value, values_for_others)
+
+    # בניית צלעות הקנאה אוטומטית
+    g.build_envy_edges()
+
+    # הוספת צלעות עם משקלים שונים שאינם אפס
+    for i in range(1, 101):
+        for j in range(i + 1, 101):
+            source_id = f'Node{i}'
+            target_id = f'Node{j}'
+            envy_weight = (i + j) % 10 + 1  # משקל קנאה משתנה, תמיד גדול מאפס
+            g.add_envy_edge(source_id, target_id, envy_weight)
+            g.add_envy_edge(target_id, source_id, envy_weight)
+
+    # הצגת משקלי הקנאה שחושבו
+    # print("משקלי הקנאה שחושבו:")
+    # for source in g.nodes:
+    #     for target, weight in g.graph[source]:
+    #         print(f"{source} -> {target}: {weight}")
+
+    # מציאת המעגל עם המשקל הממוצע הגבוה ביותר
+    cycle, avg_weight = g.find_max_avg_weight_cycle()
+    print(f"Cycle found: {cycle}, Avg Weight: {avg_weight}")
+
+#-------------------- דוגמה עם מעגל - 100 קודקודים, ללא משקל 0 --------------------------
+    print(f"\nExample 5: Graph with 100 vertices, without 0 weights")
+    g = EnvyGraph()
+
+    # הוספת 100 קודקודים עם ערכי החפצים שלהם
+    for i in range(1, 101):
+        node_id = f'Node{i}'
+        item_id = node_id
+        own_value = i * 10  # ערך החפץ של הקודקוד
+        values_for_others = {f'Node{j}': j * 5 for j in range(1, 101) if j != i}
+        g.add_node(node_id, item_id, own_value, values_for_others)
+
+    # בניית צלעות הקנאה אוטומטית
+    g.build_envy_edges()
+
+    # הוספת צלעות עם משקלים שונים שאינם אפס ליצירת מעגלים
+    for i in range(1, 100):
+        source_id = f'Node{i}'
+        target_id = f'Node{i + 1}'
+        envy_weight = (i + i + 1) % 10 + 1  # משקל קנאה משתנה, תמיד גדול מאפס
+        g.add_envy_edge(source_id, target_id, envy_weight)
+    # הוספת צלע לסגירת מעגל בין הקודקוד האחרון לראשון
+    g.add_envy_edge('Node100', 'Node1', 5)
+
+    # הצגת משקלי הקנאה שחושבו
+    # print("משקלי הקנאה שחושבו:") - בהערה על מנת למנוע מלא הדפסות
+    # for source in g.nodes:
+    #     for target, weight in g.graph[source]:
+    #         print(f"{source} -> {target}: {weight}")
+
+    # מציאת המעגל עם המשקל הממוצע הגבוה ביותר
+    cycle, avg_weight = g.find_max_avg_weight_cycle()
+    print(f"Cycle found: {cycle}, Avg Weight: {avg_weight}")
+
