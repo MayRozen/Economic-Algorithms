@@ -45,6 +45,7 @@ def compute_budget(total_budget: float,
     return [b_j(j, tau_star) for j in range(m)]
 
 
+# שיטה שנייה
 def compute_budget_direct(total_budget: float,
                           citizen_votes: List[List[float]]) -> List[float]:
     """
