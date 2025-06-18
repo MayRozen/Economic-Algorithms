@@ -122,7 +122,7 @@ def compute_budget_direct(total_budget: float,
                 return result
 
     # טיפול במצב שבו התקציב שווה בדיוק לסכום המדיאנים:
-    #    (g(max_cut) == total_budget)
+    # (g(max_cut) == total_budget)
     # אם לא מצאנו פתרון בתוך אף קטע, ייתכן שהתקציב בדיוק שווה לסכום המדיאנים העליונים — אז פשוט מחזירים את אותם מדיאנים (הקצאה מקסימלית)
     max_alloc = []
     for j in range(m):
@@ -140,8 +140,8 @@ def compute_budget_direct(total_budget: float,
 
 
 if __name__ == "__main__":
-    # === שימוש ב-compute_budget (חיפוש בינארי) ===
-    print("=== compute_budget (חיפוש בינארי) ===")
+    # שימוש ב-compute_budget (חיפוש בינארי)
+    print("compute_budget (חיפוש בינארי)")
     b1 = compute_budget(100, [[100, 0, 0], [0, 0, 100]])
     print("compute_budget(100, [[100,0,0],[0,0,100]]) →", b1)
     # צפוי: [50.0, 0.0, 50.0]
@@ -150,8 +150,8 @@ if __name__ == "__main__":
     print("compute_budget(10, [[8,2],[1,9],[5,5]]) →", b2)
     # צפוי: [5.0, 5.0]
 
-    # === שימוש ב-compute_budget_direct (שיטה ישירה) ===
-    print("\n=== compute_budget_direct (שיטה ישירה) ===")
+    # שימוש ב-compute_budget_direct (שיטה ישירה)
+    print("\n compute_budget_direct (שיטה ישירה)")
     d1 = compute_budget_direct(100, [[100, 0, 0], [0, 0, 100]])
     print("compute_budget_direct(100, [[100,0,0],[0,0,100]]) →", d1)
     # צפוי: [50.0, 0.0, 50.0]
